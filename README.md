@@ -12,8 +12,25 @@ An efficient Flash Attention implementation that returns both attention output a
 
 ## Installation
 
+### Requirements
+
+- Python >= 3.8
+- PyTorch >= 2.0.0
+- Triton >= 2.0.0
+- NumPy
+
+### Install from source
+
 ```bash
-pip install torch triton
+git clone https://github.com/yourusername/Flash_Attn_with_Score_bp_support.git
+cd Flash_Attn_with_Score_bp_support
+pip install -e .
+```
+
+### Install dependencies only
+
+```bash
+pip install torch>=2.0.0 triton>=2.0.0 numpy
 ```
 
 ## Quick Start
