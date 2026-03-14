@@ -1,6 +1,7 @@
 """
 Attention with Row-wise Score Sum
 Fused computation of row-wise attention score sum during Flash Attention computation
+Supports backward pass with causal mask
 """
 
 import math
@@ -8,15 +9,17 @@ import torch
 import triton
 import triton.language as tl
 try:
-    from .flash import maybe_contiguous, get_fwd_config
+    from .flash import maybe_contiguous, get_fwd_config, get_bwd_config
     from .dropout import philox_cuda_seed_offset
+    from .attention_with_scores_bp import flash_attention_backward
 except ImportError:
     # Handle case when running as standalone
     import sys
     import os
     sys.path.insert(0, os.path.dirname(__file__))
-    from flash import maybe_contiguous, get_fwd_config
+    from flash import maybe_contiguous, get_fwd_config, get_bwd_config
     from dropout import philox_cuda_seed_offset
+    from attention_with_scores_bp import flash_attention_backward
 
 @triton.jit
 def _fwd_kernel_with_row_sum(
